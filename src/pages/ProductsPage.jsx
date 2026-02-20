@@ -1,11 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react"; //^ l'hook useContext
+import { BudgetContext } from "../context/BudgetContext"; //^ il context
 import axios from "axios";
-
 import { Link } from "react-router-dom";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  //todo --> "sintonizzarsi alla frequenza radio" per sapere se la mod. budget è attiva
+  const { budgetMode } = useContext(BudgetContext);
 
   useEffect(() => {
     axios
@@ -38,15 +41,24 @@ export default function ProductsPage() {
       });
   }, []); // L'array vuoto serve a far partire la chiamata una volta sola
 
+  //todo un nuovo array filtrato in base allo stato del Context
+  const filteredProducts = budgetMode
+    ? products.filter((product) => product.price <= 30) // Se ON
+    : products; // Se OFF
+
+  //note
+
   //note Se sta caricando --> mostra un messaggio
   if (isLoading) {
     return <h2>Loading unexpectedly excellent products...</h2>;
   }
   return (
     <div className="container py-5">
-      <h1 className="text-center mb-4">Our Products</h1>
+      <h1 className="text-center mb-4">
+        {budgetMode ? "Baffo 🥸 friendly selection for you" : "our products"}
+      </h1>
       <div className="row g-4">
-        {products.map((product) => (
+        {filteredProducts.map((product) => (
           <div key={product.id} className="col-12 col-md-6 col-lg-4 col-xl-3">
             <div className="card h-100 p-3 shadow-sm text-center">
               <img
@@ -77,6 +89,25 @@ export default function ProductsPage() {
           </div>
         ))}
       </div>
+      {filteredProducts.length === 0 && budgetMode && (
+        <div className="text-center mt-5">
+          <img
+            src="https://media.tenor.com/gVoYG0MiA5oAAAAM/bello-baffo-roberto.gif"
+            alt="Da Crema had enough about yours requestes"
+            className="img-fluid rounded-circle border border-5 border-warning shadow-lg animate__animated animate__shakeX animate__infinite"
+            style={{
+              width: "280px",
+              height: "280px",
+              objectFit: "cover",
+              filter: "contrast(1.2) brightness(1.1)",
+            }}
+          />
+          <h3>
+            You want a lower price?! You're looking for ghosts! That price
+            doesn't exist! This is the bottom, this is the truth!
+          </h3>
+        </div>
+      )}
     </div>
   );
 }
