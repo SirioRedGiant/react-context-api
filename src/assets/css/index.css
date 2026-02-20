@@ -1,0 +1,38 @@
+/*//note UTILIZZO DI ANIMATE.CSS*/
+.btn-funny {
+  transition: all 0.3s ease;
+}
+
+/* Quando il mouse NON è sopra, pulsa */
+.btn-funny:not(:hover) {
+  animation: pulse 2s infinite;
+}
+
+/* Quando il mouse è sopra, applica il wobble aumento della specificità per poter sovrascrivere senza usare --> !important*/
+.btn.btn-funny:hover {
+  animation: wobble 0.5s infinite;
+  background-color: #98000f;
+  border-color: #840915;
+  transform: scale(1.1);
+  color: white;
+}
+
+/*//note Il pulsante "Disgustoso" */
+.btn-disgusting {
+  background-color: #4b5320 !important;
+  color: #adff2f !important;
+  border: 3px solid #2f4f4f !important;
+  transition: all 0.1s ease-in-out;
+}
+
+.btn-disgusting:hover {
+  /* Cambia cursore in 'cell' o 'not-allowed' per dare fastidio */
+  cursor: wait;
+  /* Colore più sgradevole al passaggio */
+  background-color: #2e3b23 !important;
+  /* Effetto viscido */
+  filter: contrast(1.5) sepia(1) hue-rotate(15deg);
+  /* Animazione Animate.css richiamata */
+  animation: jello 0.8s infinite;
+  box-shadow: 0 0 20px #adff2f;
+}
